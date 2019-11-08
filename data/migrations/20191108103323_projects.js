@@ -5,14 +5,14 @@ exports.up = function(knex) {
       tbl.increments(); 
       tbl.string('name', 255).notNullable(); 
       tbl.string('description', 255); 
-      tbl.boolean('completed').defaultTo(false); 
+      tbl.boolean('completed'); 
       
   })
   .createTable('tasks', tbl => {
       tbl.increments(); 
       tbl.string('description', 255).notNullable(); 
-      tbl.sting('notes', 255).notNullable(); 
-      tbl.boolean('completed').defaultTo(false); 
+      tbl.string('notes', 255)
+      tbl.boolean('completed'); 
       tbl.integer('projects_id')
       .unsigned()
       .references('id')
@@ -35,21 +35,25 @@ exports.up = function(knex) {
   })
   .createTable('projects_resources', tbl => {
       tbl.increments(); 
-      //fk for projects
-      tbl.integer('projects_id')
+
+      tbl
+        .integer('project_id')
         .unsigned()
         .references('id')
         .inTable('projects')
         .onDelete('RESTRICT')
         .onUpdate('CASCADE');
-
-        //fk for tasks
-        tbl.integer('tasks_id')
+      tbl
+        .integer('resources_id')
         .unsigned()
         .references('id')
-        .inTable('tasks')
+        .inTable('resources')
         .onDelete('RESTRICT')
         .onUpdate('CASCADE');
+
+      tbl.date('from').notNullable();
+      tbl.date('to');
+        
   });
   
 };
